@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Código QR - Formulario de Empleo ABB</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF0000 0%, #E60000 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #FF0000;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .qr-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px solid #FF0000;
+        }
+
+        .qr-code {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .instructions {
+            background: #fff5f5;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #FF0000;
+        }
+
+        .instructions h3 {
+            color: #FF0000;
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        .instructions p {
+            color: #555;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .troubleshooting {
+            background: #fff3cd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .troubleshooting h3 {
+            color: #856404;
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        .troubleshooting p {
+            color: #856404;
+            margin: 8px 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .url-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #666;
+            word-break: break-all;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .qr-code {
+                width: 200px;
+                height: 200px;
+            }
+
+            .instructions p, .troubleshooting p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="ABB_LOGO.png" alt="ABB Logo" class="logo">
+        
+        <h1>Formulario de Empleo</h1>
+        <p class="subtitle">Escanea el código QR para acceder al formulario de aplicación de empleo</p>
+        
+        <div class="qr-container">
+            <img id="qrCode" class="qr-code" alt="Código QR del formulario">
+        </div>
+    </div>
+
+    <script>
+        // URL del dominio oficial de ABB Job Fair
+        const url = 'https://abbjobfair.com'; 
+        
+        console.log('Cargando página QR...'); // debug
+        
+        // Generar QR - uso esta API porque es gratis y funciona bien
+        const linkQR = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(url)}`;
+        const imagen = document.getElementById('qrCode');
+        imagen.src = linkQR;
+        
+        // Para móviles que no pueden escanear, que puedan tocar el QR
+        imagen.addEventListener('click', function() {
+            console.log('Click en QR, abriendo formulario...');
+            window.open(url, '_blank');
+        });
+        
+        console.log('Todo listo! URL:', url);
+    </script>
+</body>
+</html>
