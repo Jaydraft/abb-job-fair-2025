@@ -25,10 +25,8 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Crear carpetas si no existen - adaptado para Railway
-const uploadsDir = process.env.RAILWAY_VOLUME_MOUNT_PATH 
-    ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH, 'uploads')
-    : path.join(__dirname, 'uploads');
+// Crear carpetas si no existen - usar carpeta local del proyecto
+const uploadsDir = path.join(__dirname, 'uploads');
 const partTimeDir = path.join(uploadsDir, 'part-time');
 const coopDir = path.join(uploadsDir, 'coop');
 
@@ -125,8 +123,6 @@ app.post('/submit-application', upload.single('resume'), (req, res) => {
         console.log('  - Existe temporal?', fs.existsSync(archivoTemporal));
         console.log('  - Carpeta destino existe?', fs.existsSync(path.dirname(archivoFinal)));
         console.log('  - uploadsDir:', uploadsDir);
-        console.log('  - RAILWAY_VOLUME_MOUNT_PATH:', process.env.RAILWAY_VOLUME_MOUNT_PATH);
-        console.log('  - __dirname:', __dirname);
         console.log('  - workType:', workType);
         console.log('  - carpetaDestino:', carpetaDestino);
 
@@ -155,9 +151,9 @@ app.post('/submit-application', upload.single('resume'), (req, res) => {
             }
             
         } catch (moveError) {
-            console.error('❌ Error moviendo archivo:', moveError.message);
-            console.error('❌ Stack trace:', moveError.stack);
-            console.error('❌ Detalles del error:');
+            console.error(' Error moviendo archivo:', moveError.message);
+            console.error(' Stack trace:', moveError.stack);
+            console.error(' Detalles del error:');
             console.error('  - Archivo temporal existe?', fs.existsSync(archivoTemporal));
             console.error('  - Carpeta destino existe?', fs.existsSync(path.dirname(archivoFinal)));
             console.error('  - Permisos carpeta destino:', fs.statSync(path.dirname(archivoFinal)).mode);
