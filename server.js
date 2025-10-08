@@ -124,6 +124,11 @@ app.post('/submit-application', upload.single('resume'), (req, res) => {
         console.log('  - Archivo final:', archivoFinal);
         console.log('  - Existe temporal?', fs.existsSync(archivoTemporal));
         console.log('  - Carpeta destino existe?', fs.existsSync(path.dirname(archivoFinal)));
+        console.log('  - uploadsDir:', uploadsDir);
+        console.log('  - RAILWAY_VOLUME_MOUNT_PATH:', process.env.RAILWAY_VOLUME_MOUNT_PATH);
+        console.log('  - __dirname:', __dirname);
+        console.log('  - workType:', workType);
+        console.log('  - carpetaDestino:', carpetaDestino);
 
         try {
             // Verificar que el archivo temporal existe
@@ -150,7 +155,13 @@ app.post('/submit-application', upload.single('resume'), (req, res) => {
             }
             
         } catch (moveError) {
-            console.error('❌ Error moviendo archivo:', moveError);
+            console.error('❌ Error moviendo archivo:', moveError.message);
+            console.error('❌ Stack trace:', moveError.stack);
+            console.error('❌ Detalles del error:');
+            console.error('  - Archivo temporal existe?', fs.existsSync(archivoTemporal));
+            console.error('  - Carpeta destino existe?', fs.existsSync(path.dirname(archivoFinal)));
+            console.error('  - Permisos carpeta destino:', fs.statSync(path.dirname(archivoFinal)).mode);
+            
             try {
                 // Si falla el movimiento, intentar copiar y eliminar
                 console.log('🔄 Intentando copiar y eliminar...');
@@ -159,7 +170,10 @@ app.post('/submit-application', upload.single('resume'), (req, res) => {
                 console.log('✅ Archivo copiado exitosamente');
             } catch (copyError) {
                 console.error('❌ Error copiando archivo:', copyError);
-                throw copyError;
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error procesando el archivo: ' + copyError.message
+                });
             }
         }
 
